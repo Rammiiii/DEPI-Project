@@ -22,13 +22,13 @@ def convert_categorical_to_numarical(value,category):
             return 3
         else:
             return 4
-    elif category== 'residence_type':
+    elif category== 'Residence_type':
         if value == 'Urban':
             return 0
         else:
             return 1
     elif category== 'smoking_status':
-        if value == 'Passive Smoker':
+        if value == 'smoker':
             return 0
         elif value == 'formerly smoked':
             return 1
@@ -39,7 +39,7 @@ def convert_categorical_to_numarical(value,category):
 
 
 
-model_path =r'D:\data science\project_depi\DEPI-Project\stroke_prediction_model.pkl'
+model_path =r'D:\data science\project_depi\DEPI-Project\stroke_prediction_model2.pkl'
 st.title("Stroke Prediction Application")
 st.write("Enter the following details to predict the likelihood of a stroke:")
 age = st.number_input("Age", min_value=0, max_value=120, value=30)
@@ -47,11 +47,11 @@ hypertension = st.selectbox("Hypertension (0 = No, 1 = Yes)", options=[0, 1])
 heart_disease = st.selectbox("Heart Disease (0 = No, 1 = Yes)", options=[0, 1])
 avg_glucose_level = st.number_input("Average Glucose Level", min_value=0.0, value=100.0)
 bmi = st.number_input("BMI", min_value=0.0, value=25.0)
-gender = convert_categorical_to_numarical( st.selectbox("Gender", options=["Male", "Female", "Other"]),'gender')
+gender = convert_categorical_to_numarical( st.selectbox("Gender", options=["Male", "Female"]),'gender')
 ever_married = convert_categorical_to_numarical( st.selectbox("Ever Married", options=["Yes", "No"]),'ever_married')
 
 work_type = convert_categorical_to_numarical( st.selectbox("Work Type", options=["Private", "Self-employed", "Govt_job", "children", "Never_worked"]),'work_type')
-Residence_type = convert_categorical_to_numarical( st.selectbox("Residence Type", options=["Urban", "Rural"]),'residence_type')
+Residence_type = convert_categorical_to_numarical( st.selectbox("Residence Type", options=["Urban", "Rural"]),'Residence_type')
 smoking_status = convert_categorical_to_numarical( st.selectbox("Smoking Status", options=["never smoked", "formerly smoked", "smokes", "unknown"]),'smoking_status')
 
 
@@ -88,3 +88,4 @@ if st.button("Predict Stroke"):
         st.success("The model predicts a high likelihood of stroke.")
     else:
         st.success("The model predicts a low likelihood of stroke.")
+
