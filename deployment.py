@@ -1,4 +1,18 @@
 import streamlit as st
+import pandas as pd
+import pickle
+
+model_path = r'D:\data science\project_depi\DEPI-Project\stroke_prediction_model.pkl'
+
+
+@st.cache_resource
+def load_model(path):
+    import pickle
+    with open(path, 'rb') as file:
+        return pickle.load(file)
+
+model = load_model(model_path)
+
 
 def convert_categorical_to_numarical(value,category):
     if category== 'gender':
@@ -27,19 +41,20 @@ def convert_categorical_to_numarical(value,category):
             return 0
         else:
             return 1
-    elif category== 'smoking_status':
-        if value == 'smoker':
+            # inside convert_categorical_to_numarical
+    elif category == 'smoking_status':
+
+        if value == 'smokes' or value == 'smoker':  # accept both spellings
             return 0
         elif value == 'formerly smoked':
             return 1
         elif value == 'never smoked':
             return 2
         else:
-            return 3
+             return 3
 
 
-
-model_path =r'D:\data science\project_depi\DEPI-Project\stroke_prediction_model2.pkl'
+model_path =r'D:\data science\project_depi\DEPI-Project\stroke_prediction_model.pkl'
 st.title("Stroke Prediction Application")
 st.write("Enter the following details to predict the likelihood of a stroke:")
 age = st.number_input("Age", min_value=0, max_value=120, value=30)
@@ -58,12 +73,7 @@ smoking_status = convert_categorical_to_numarical( st.selectbox("Smoking Status"
 
 if st.button("Predict Stroke"):
 
-    import pandas as pd
-    import pickle
 
-    # Load the model
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
 
     # Prepare the input data
     input_data = pd.DataFrame({
@@ -83,9 +93,9 @@ if st.button("Predict Stroke"):
     # Make the prediction
     prediction = model.predict(input_data)
 
-    # Display the result
-    if prediction[0] == 1:
-        st.success("The model predicts a high likelihood of stroke.")
+
+    if prediction == 1:
+        st.markdown("<h2 style='color: red;'>The model predicts a high likelihood of stroke.</h2>", unsafe_allow_html=True)
     else:
-        st.success("The model predicts a low likelihood of stroke.")
+        st.markdown("<h2 style='color: green;'>The model predicts a low likelihood of stroke.</h2>", unsafe_allow_html=True)
 
